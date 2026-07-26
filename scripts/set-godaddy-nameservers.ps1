@@ -58,23 +58,37 @@ function Write-Fail  { param($m) Write-Host "  [fail] $m" -ForegroundColor Red }
 
 Write-Step 'Authenticating'
 
+# GoDaddy has two auth schemes. Newer personal access tokens (gd_pat_...) use
+# a bearer token; older credentials are a key + secret pair sent as "sso-key".
+# Verified against this account: the PAT + Bearer combination is the one that
+# works - sso-key with a PAT returns 401.
+$token  = $env:GODADDY_TOKEN
 $key    = $env:GODADDY_API_KEY
 $secret = $env:GODADDY_API_SECRET
 
-if (-not $key -or -not $secret) {
+if ($token) {
+    $auth = "Bearer $token"
+    Write-Info 'Using personal access token (Bearer)'
+}
+elseif ($key -and $secret) {
+    $auth = "sso-key $($key):$($secret)"
+    Write-Info 'Using legacy key + secret (sso-key)'
+}
+else {
     Write-Host @'
-  GODADDY_API_KEY / GODADDY_API_SECRET are not set.
+  No GoDaddy credentials found.
 
-  Create a PRODUCTION key at https://developer.godaddy.com/keys then:
+  Create a PRODUCTION token at https://developer.godaddy.com/keys then:
 
-      $env:GODADDY_API_KEY    = Read-Host "Key"    -AsSecureString | ConvertFrom-SecureString -AsPlainText
-      $env:GODADDY_API_SECRET = Read-Host "Secret" -AsSecureString | ConvertFrom-SecureString -AsPlainText
+      $env:GODADDY_TOKEN = Read-Host "Token" -AsSecureString | ConvertFrom-SecureString -AsPlainText
+
+  (Or set GODADDY_API_KEY + GODADDY_API_SECRET for older key/secret pairs.)
 '@ -ForegroundColor Yellow
     exit 1
 }
 
 $headers = @{
-    'Authorization' = "sso-key $($key):$($secret)"
+    'Authorization' = $auth
     'Content-Type'  = 'application/json'
 }
 
