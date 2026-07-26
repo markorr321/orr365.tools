@@ -12,3 +12,8 @@ Desktop.ini
 # Logs / temp
 *.log
 *.tmp
+
+# Cloudflare Wrangler
+.wrangler/
+node_modules/
+.dev.vars

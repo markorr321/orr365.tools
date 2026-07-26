@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "orr365tools",
+  "compatibility_date": "2026-07-26",
+  "observability": {
+    "enabled": true
+  },
+  // Only ./public is uploaded. Keeping the site out of the repo root is what
+  // stops .git, README and config files being served as public web assets.
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  }
+}

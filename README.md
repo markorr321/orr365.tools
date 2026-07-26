@@ -6,7 +6,7 @@ Plain static HTML, CSS and JavaScript — no build step, no dependencies, no npm
 
 ## Adding or changing a tool
 
-Everything lives in one file: [`assets/js/tools.js`](assets/js/tools.js).
+Everything lives in one file: [`public/assets/js/tools.js`](public/assets/js/tools.js).
 
 Copy an existing entry, change the values, save, refresh the browser:
 
@@ -31,50 +31,58 @@ uses that category, so you can add a new category to `CATEGORIES` at any time.
 
 ## Running it locally
 
-Open `index.html` directly in a browser, or serve the folder:
+Open `public/index.html` directly in a browser, or serve the folder:
 
 ```powershell
-# PowerShell 7 with Python installed
-python -m http.server 8080
-
-# or with Node
-npx serve .
+npx wrangler dev      # serves public/ exactly as Cloudflare will
 ```
 
-Then browse to <http://localhost:8080>.
+## Deploying
 
-## Deploying to Cloudflare Pages
+Deployed on **Cloudflare Workers static assets**, configured by
+[`wrangler.jsonc`](wrangler.jsonc). Every push to `main` redeploys automatically.
 
-**First time**
+**Only `public/` is ever uploaded.** This is deliberate: an earlier build used the
+repo root as the asset directory and served `.git/` — including `.git/config` and
+every object — as public web files. Keep the asset directory pointed at `public/`
+and never move site files back to the root.
 
-1. Push this folder to a GitHub repo (e.g. `markorr321/orr365.tools`).
-2. Cloudflare dashboard → **Workers & Pages** → **Create** → **Pages** → **Connect to Git**.
-3. Pick the repo. Build settings:
-   - Framework preset: **None**
-   - Build command: *(leave empty)*
-   - Build output directory: `/`
-4. **Save and Deploy**.
+### Custom domain
 
-**Custom domain**
+DNS for `orr365.tools` is at GoDaddy, so records are added there rather than in
+Cloudflare:
 
-1. Add `orr365.tools` as a site in Cloudflare and point your registrar's
-   nameservers at the two Cloudflare nameservers it gives you.
-2. In the Pages project → **Custom domains** → **Set up a domain** → `orr365.tools`.
-3. Repeat for `www.orr365.tools` if you want it to redirect.
+| Type  | Name  | Value                        |
+| ----- | ----- | ---------------------------- |
+| A     | `@`   | `162.159.152.4`              |
+| A     | `@`   | `162.159.153.4`              |
+| CNAME | `www` | `orr365tools.workers.dev`    |
 
-HTTPS certificates are issued automatically. Every push to `main` redeploys.
+Remove GoDaddy's parking records (`3.33.130.190`, `15.197.148.33`) first.
 
-**No-git alternative:** Workers & Pages → Create → Pages → *Upload assets*, and
-drag this folder in. Fine for a one-off, but you lose automatic redeploys.
+### www → apex redirect
+
+Workers static assets only accepts **relative** URLs in `_redirects`, so a
+cross-hostname redirect cannot live in this repo — that is what broke the first
+build. Options:
+
+1. Add `www.orr365.tools` as a second custom domain. Both hostnames serve the
+   site; the `<link rel="canonical">` tag on each page tells search engines the
+   apex is authoritative. Simplest, and good enough.
+2. Move DNS to Cloudflare and add a **Redirect Rule** for a true 301.
 
 ## Files
 
-| Path                   | Purpose                                              |
-| ---------------------- | ---------------------------------------------------- |
-| `index.html`           | The whole page — markup and inline SVG icon sprite    |
-| `assets/css/styles.css`| GitHub dark (Primer) theme                            |
-| `assets/js/tools.js`   | **Tool data — the file you edit**                     |
-| `assets/js/app.js`     | Rendering, search and category filtering              |
-| `_headers`             | Cloudflare Pages security headers and cache policy    |
-| `robots.txt`           | Crawler policy                                        |
-| `sitemap.xml`          | Sitemap                                               |
+| Path                          | Purpose                                           |
+| ----------------------------- | ------------------------------------------------- |
+| `wrangler.jsonc`              | Cloudflare config — sets `public/` as the assets dir |
+| `public/index.html`           | Home page — markup and inline SVG icon sprite      |
+| `public/about.html`           | About page                                         |
+| `public/404.html`             | Not-found page                                     |
+| `public/assets/css/styles.css`| GitHub dark (Primer) theme                         |
+| `public/assets/js/tools.js`   | **Tool data — the file you edit**                  |
+| `public/assets/js/app.js`     | Rendering, search and category filtering           |
+| `public/assets/js/about.js`   | About page tools strip                             |
+| `public/_headers`             | Security headers and cache policy                  |
+| `public/robots.txt`           | Crawler policy                                     |
+| `public/sitemap.xml`          | Sitemap                                            |
