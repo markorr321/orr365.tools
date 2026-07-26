@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://orr365.tools/sitemap.xml
