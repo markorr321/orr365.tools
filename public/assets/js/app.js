@@ -73,11 +73,16 @@
       t.docs    ? iconLink(t.docs, 'i-book', 'Docs')            : '',
     ].join('');
 
-    const install = t.module
+    // `module` → Install-Module, `script` → Install-Script (Gallery scripts).
+    const cmd = t.module ? `Install-Module ${t.module}`
+              : t.script ? `Install-Script ${t.script}`
+              : '';
+
+    const install = cmd
       ? `<div class="card__install">
-           <code>Install-Module ${esc(t.module)}</code>
+           <code>${esc(cmd)}</code>
            <button type="button" class="card__copy"
-                   data-copy="Install-Module ${esc(t.module)}"
+                   data-copy="${esc(cmd)}"
                    aria-label="Copy install command for ${esc(t.name)}">
              <svg class="icon" aria-hidden="true"><use href="#i-copy"></use></svg>
            </button>

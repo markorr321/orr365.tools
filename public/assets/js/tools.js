@@ -15,6 +15,7 @@
    repo     (optional)  GitHub repository URL.
    gallery  (optional)  PowerShell Gallery package URL.
    module   (optional)  Module name — renders a copyable `Install-Module` line.
+   script   (optional)  Gallery *script* name — renders `Install-Script` instead.
    tags     (optional)  Free-text keywords. Shown as pills, also searchable.
    lang     (optional)  Drives the coloured language dot. See LANG_COLORS.
    badge    (optional)  'new' | 'updated' — small coloured pill on the card.
@@ -108,6 +109,17 @@ const TOOLS = [
     cats: ['Autopilot', 'Intune', 'Entra ID', 'PowerShell'],
     tags: ['offboarding', 'bulk cleanup', 'WhatIf'],
     lang: 'PowerShell',
+  },
+  {
+    name: 'Get-WindowsAutopilotImportCommunity',
+    desc: 'GUI for registering devices with Windows Autopilot during OOBE — v1 hardware hash and v2 Device Preparation IDs, offline CSV export, network and Autopilot diagnostics. One self-contained script.',
+    url: 'https://github.com/markorr321/Get-WindowsAutopilotImportCommunity',
+    gallery: 'https://www.powershellgallery.com/packages/Get-WindowsAutopilotImportGUICommunity',
+    script: 'Get-WindowsAutopilotImportGUICommunity',
+    cats: ['Autopilot', 'Intune', 'PowerShell', 'Windows', 'GitHub'],
+    tags: ['OOBE', 'hardware hash', 'device preparation', 'GUI'],
+    lang: 'PowerShell',
+    badge: 'new',
   },
 
   /* ------------------------------------------------------------------------
