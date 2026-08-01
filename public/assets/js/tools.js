@@ -113,10 +113,11 @@ const TOOLS = [
   {
     name: 'Get-WindowsAutopilotImportCommunity',
     desc: 'GUI for registering devices with Windows Autopilot during OOBE — v1 hardware hash and v2 Device Preparation IDs, offline CSV export, network and Autopilot diagnostics. One self-contained script.',
-    url: 'https://github.com/markorr321/Get-WindowsAutopilotImportCommunity',
+    url: 'https://apigc.orr365.tech/',
+    repo: 'https://github.com/markorr321/Get-WindowsAutopilotImportCommunity',
     gallery: 'https://www.powershellgallery.com/packages/Get-WindowsAutopilotImportGUICommunity',
     script: 'Get-WindowsAutopilotImportGUICommunity',
-    cats: ['Autopilot', 'Intune', 'PowerShell', 'Windows', 'GitHub'],
+    cats: ['Autopilot', 'Intune', 'PowerShell', 'Windows'],
     tags: ['OOBE', 'hardware hash', 'device preparation', 'GUI'],
     lang: 'PowerShell',
     badge: 'new',
