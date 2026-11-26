@@ -53,7 +53,6 @@ const TOOLS = [
     cats: ['Entra ID', 'Microsoft Graph', 'PowerShell'],
     tags: ['identity governance', 'entitlement management', 'TUI'],
     lang: 'PowerShell',
-    badge: 'updated',
   },
   {
     name: 'Entra PIM',
@@ -98,6 +97,7 @@ const TOOLS = [
     cats: ['Intune', 'Microsoft Graph', 'PowerShell', 'Windows'],
     tags: ['remediations', 'WPF', 'GUI'],
     lang: 'PowerShell',
+    badge: 'updated',
   },
   {
     name: 'Autopilot Cleanup',
